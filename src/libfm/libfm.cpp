@@ -288,6 +288,11 @@ int main(int argc, char **argv) {
 		fml->max_target = train.max_target;
 		fml->min_target = train.min_target;
 		fml->meta = &meta;
+
+        //set task always = 0
+        fml->task = 0;
+
+        /*
 		if (! cmdline.getValue("task").compare("r") ) {
 			fml->task = 0;
 		} else if (! cmdline.getValue("task").compare("c") ) {
@@ -300,6 +305,7 @@ int main(int argc, char **argv) {
 		} else {
 			throw "unknown task";
 		}
+        */
 		
 		// (4) init the logging
 		RLog* rlog = NULL;	 

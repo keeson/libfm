@@ -26,6 +26,7 @@
 
 #ifndef FM_MODEL_H_
 #define FM_MODEL_H_
+#include <math.h>
 
 #include "../util/matrix.h"
 #include "../util/fmatrix.h"
@@ -58,6 +59,7 @@ class fm_model {
 		void debug();
 		void init();
 		double predict(sparse_row<FM_FLOAT>& x);
+        double sigmoid(double x);
 		double predict(sparse_row<FM_FLOAT>& x, DVector<double> &sum, DVector<double> &sum_sqr);
 		void saveModel(std::string model_file_path);
 		int loadModel(std::string model_file_path);
@@ -104,6 +106,10 @@ double fm_model::predict(sparse_row<FM_FLOAT>& x) {
 	return predict(x, m_sum, m_sum_sqr);		
 }
 
+double fm_model::sigmoid(double x) {
+	return 1.0 / (1.0 + exp(-x));
+}
+
 double fm_model::predict(sparse_row<FM_FLOAT>& x, DVector<double> &sum, DVector<double> &sum_sqr) {
 	double result = 0;
 	if (k0) {	
@@ -125,7 +131,7 @@ double fm_model::predict(sparse_row<FM_FLOAT>& x, DVector<double> &sum, DVector<
 		}
 		result += 0.5 * (sum(f)*sum(f) - sum_sqr(f));
 	}
-	return result;
+	return sigmoid(result);
 }
 
 /*

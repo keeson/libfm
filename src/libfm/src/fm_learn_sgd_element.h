@@ -45,7 +45,6 @@ class fm_learn_sgd_element: public fm_learn_sgd {
 			std::cout << "SGD: DON'T FORGET TO SHUFFLE THE ROWS IN TRAINING DATA TO GET THE BEST RESULTS." << std::endl; 
 			// SGD
 			for (int i = 0; i < num_iter; i++) {
-			
 				double iteration_time = getusertime();
 				for (train.data->begin(); !train.data->end(); train.data->next()) {
 					
@@ -61,7 +60,8 @@ class fm_learn_sgd_element: public fm_learn_sgd {
 					SGD(train.data->getRow(), mult, sum);					
 				}				
 				iteration_time = (getusertime() - iteration_time);
-				double rmse_train = evaluate(train);
+				//double rmse_train = evaluate(train);
+                double rmse_train = 0.0;
 				double rmse_test = evaluate(test);
 				std::cout << "#Iter=" << std::setw(3) << i << "\tTrain=" << rmse_train << "\tTest=" << rmse_test << std::endl;
 				if (log != NULL) {

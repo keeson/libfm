@@ -23,12 +23,14 @@
 #define FM_LEARN_H_
 
 #include <cmath>
+#include <algorithm>
+#include <utility>
 #include "Data.h"
 #include "../../fm_core/fm_model.h"
 #include "../../util/rlog.h"
 #include "../../util/util.h"
 
-
+typedef std::pair<double, double> ValuePair;
 class fm_learn {
 	protected:
 		DVector<double> sum, sum_sqr;
@@ -80,6 +82,7 @@ class fm_learn {
 
 		virtual double evaluate(Data& data) {
 			assert(data.data != NULL);
+            return evaluate_auc(data);
 			if (task == TASK_REGRESSION) {
 				return evaluate_regression(data);
 			} else if (task == TASK_CLASSIFICATION) {
@@ -140,6 +143,45 @@ class fm_learn {
 			}
 
 			return std::sqrt(rmse_sum_sqr/data.data->getNumRows());
+		}
+
+        static bool compare_pair (ValuePair i, ValuePair j) { return (i.second < j.second);}
+
+        virtual double evaluate_auc(Data& data) {
+            using namespace std;
+            long num_rows = data.data->getNumRows();
+            ValuePair* pair_list = new ValuePair[num_rows];
+			double eval_time = getusertime();
+            long i = 0;
+            long positive_count = 0;
+            long negative_count = 0;
+			for (data.data->begin(); !data.data->end(); data.data->next()) {
+				double p = predict_case(data); 
+				p = std::min(max_target, p);
+				p = std::max(min_target, p);
+				double t =  data.target(data.data->getRowIndex());
+                if (t > 0){
+                    positive_count++;
+                }else {
+                    negative_count++;
+                }
+                pair_list[++i] = make_pair(t, p);
+			}
+            sort(pair_list, pair_list+num_rows, compare_pair);
+            double positive_rank_sum = 0.0;
+            for (long i = 0; i < num_rows; ++i){
+                if (pair_list[i].first > 0){
+                    positive_rank_sum += i+1;
+                }
+            }
+            double auc = (positive_rank_sum - positive_count * (positive_count + 1) / 2) / (positive_count * negative_count);
+			eval_time = (getusertime() - eval_time);
+			// log the values
+			if (log != NULL) {
+				log->log("auc", auc);
+				log->log("time_pred", eval_time);
+			}
+            return auc;
 		}
 
 };
