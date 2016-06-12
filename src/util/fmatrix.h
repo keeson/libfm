@@ -224,6 +224,7 @@ template <typename T> class LargeSparseMatrixHD : public LargeSparseMatrix<T> {
 		virtual bool end() { return row_index >= num_rows; }
 
 		virtual sparse_row<T>& getRow() { return data(position_in_data_cache); }
+	    virtual sparse_row<T>& getRow(uint index) { return data(index); }
 		virtual uint getRowIndex() { return row_index; }
 	
 	

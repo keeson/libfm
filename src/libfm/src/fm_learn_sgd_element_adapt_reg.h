@@ -303,7 +303,8 @@ class fm_learn_sgd_element_adapt_reg: public fm_learn_sgd {
 				iteration_time = (getusertime() - iteration_time);
 	
 				double rmse_val = evaluate(*validation);
-				double rmse_train = evaluate(train);
+				//double rmse_train = evaluate(train);
+				double rmse_train = 0.0;
 				double rmse_test = evaluate(test);
 				std::cout << "#Iter=" << std::setw(3) << i << "\tTrain=" << rmse_train << "\tTest=" << rmse_test << std::endl;
 				if (log != NULL) {

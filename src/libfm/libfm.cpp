@@ -64,13 +64,8 @@ int main(int argc, char **argv) {
 	try {
 		CMDLine cmdline(argc, argv);
 		std::cout << "----------------------------------------------------------------------------" << std::endl;
-		std::cout << "libFM" << std::endl;
-		std::cout << "  Version: 1.4.2" << std::endl;
-		std::cout << "  Author:  Steffen Rendle, srendle@libfm.org" << std::endl;
-		std::cout << "  WWW:     http://www.libfm.org/" << std::endl;
-		std::cout << "This program comes with ABSOLUTELY NO WARRANTY; for details see license.txt." << std::endl;
-		std::cout << "This is free software, and you are welcome to redistribute it under certain" << std::endl;
-		std::cout << "conditions; for details see license.txt." << std::endl;
+		std::cout << "libFM modified by keeson" << std::endl;
+		std::cout << " see: http://www.libfm.org/" << std::endl;
 		std::cout << "----------------------------------------------------------------------------" << std::endl;
 		
 		const std::string param_task		= cmdline.registerParameter("task", "r=regression, c=binary classification [MANDATORY]");
